@@ -1,0 +1,12 @@
+{
+  "name": "contrast-oracle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A zero-dependency bookmarklet that audits text contrast across translucent and gradient backgrounds.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node --test test/*.test.js",
+    "verify": "node --test test/*.test.js && node scripts/build.js && node scripts/verify-build.js"
+  }
+}
