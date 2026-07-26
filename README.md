@@ -4,6 +4,8 @@ Walk every text node, compute the effective background through stacked transluce
 
 Catalog task: `EXT-004`. Part of [thousand](../../README.md).
 
+**[Install the bookmarklet](https://jesserweigel.github.io/contrast-oracle/)**
+
 ## What this is
 
 Contrast Oracle is a self-contained, zero-dependency browser bookmarklet. It
