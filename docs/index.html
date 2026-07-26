@@ -1,0 +1,115 @@
+<title>contrast-oracle</title>
+<style>
+:root{color-scheme:light;--bg:#FAF9FC;--bg2:#F2F0F7;--ink:#1B1826;--ink2:#4A4459;
+--ink3:#6C6580;--rule:#DDD8E8;--accent:#4A3AA7;--code:#F2F0F7;
+--mono:ui-monospace,"SF Mono","Cascadia Mono","Roboto Mono",Menlo,Consolas,monospace;
+--sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+@media(prefers-color-scheme:dark){:root:where(:not([data-theme=light])){color-scheme:dark;
+--bg:#17151C;--bg2:#1F1C27;--ink:#EDE9F5;--ink2:#B9B2C9;--ink3:#948CA6;--rule:#322D3E;
+--accent:#9085E9;--code:#1F1C27}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#17151C;--bg2:#1F1C27;--ink:#EDE9F5;
+--ink2:#B9B2C9;--ink3:#948CA6;--rule:#322D3E;--accent:#9085E9;--code:#1F1C27}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px 90px}
+header{padding:64px 0 28px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--ink3);margin:0 0 14px}
+h1{font-family:var(--mono);font-weight:600;font-size:clamp(30px,5.5vw,50px);line-height:1.05;
+letter-spacing:-.03em;margin:0 0 14px;text-wrap:balance}
+.tag{font-size:19px;color:var(--ink2);margin:0;max-width:58ch}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{font-family:var(--mono);font-size:13px;text-decoration:none;padding:9px 16px;
+border:1px solid var(--rule);border-radius:3px;color:var(--ink);background:var(--bg2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary:hover{color:var(--bg);opacity:.9}
+h2{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+color:var(--ink3);font-weight:600;margin:44px 0 14px;padding-bottom:8px;
+border-bottom:1px solid var(--rule)}
+h3{font-size:17px;margin:26px 0 8px}
+p,li{color:var(--ink2)}p{max-width:66ch}
+strong{color:var(--ink)}
+a{color:var(--accent)}
+pre{background:var(--code);border:1px solid var(--rule);border-radius:4px;padding:14px 16px;
+overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;color:var(--ink)}
+code{font-family:var(--mono);font-size:.9em;background:var(--code);padding:1px 5px;
+border-radius:3px}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;font-size:14.5px;margin:14px 0;display:block;
+overflow-x:auto}
+th,td{text-align:left;padding:8px 14px 8px 0;border-bottom:1px solid var(--rule);
+vertical-align:top}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+color:var(--ink3);font-weight:600;white-space:nowrap}
+blockquote{margin:18px 0;padding:12px 18px;border-left:3px solid var(--accent);
+background:var(--bg2);border-radius:0 4px 4px 0}
+blockquote p{margin:0}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);
+font-size:14px;color:var(--ink3)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<div class="wrap">
+<header>
+  <p class="eyebrow">JesseRWeigel &middot; open source</p>
+  <h1>contrast-oracle</h1>
+  <p class="tag">Audit contrast in place and get the nearest passing color.</p>
+  <div class="cta">
+    
+    <a class="btn primary" href="./demo/">Install the bookmarklet</a>
+    <a class="btn" href="https://github.com/JesseRWeigel/contrast-oracle">Source on GitHub</a>
+  </div>
+</header>
+<p>Walk every text node, compute the effective background through stacked translucent parents and gradients, evaluate WCAG 2.2 contrast plus APCA Lc, and for each failure suggest the nearest color in OKLCH that passes while preserving hue and chroma as far as possible. Overlay the failures in place with the suggested hex. Done when it catches a failure that axe-core misses because of a gradient background.</p>
+<p>Catalog task: <code>EXT-004</code>. Part of <a href="../../README.md">thousand</a>.</p>
+<h2>What this is</h2>
+<p>Contrast Oracle is a self-contained, zero-dependency browser bookmarklet. It walks visible text nodes, samples their rendered rectangles, and composites solid colors, translucent ancestor groups, linear gradients, and radial gradients from the page canvas to the text element.</p>
+<p>Each sample receives a WCAG 2.2 contrast ratio and an APCA Lc value. Normal text uses a WCAG AA threshold of 4.5 and an APCA target of 60. Large text uses 3.0 and 45. A failing text rectangle gets an in-place overlay showing the worst ratio, APCA Lc, and a suggested six-digit hex color.</p>
+<p>Suggestions search OKLCH lightness in order of distance from the source color. Hue and chroma stay fixed when the result is in sRGB. Out-of-gamut candidates reduce chroma while retaining hue. The rounded hex is checked again against every sampled background before the tool labels it as passing.</p>
+<p>Gradient auditing combines an adaptive spatial scan with critical samples at linear color-stop intervals and radial stop rings. The regression fixture contains dark-gray text that passes against <code>background-color: white</code> and fails over the lower-contrast edge of a linear gradient.</p>
+<h2>Running it</h2>
+<pre><code>node scripts/build.js
+python3 -m http.server 8000</code></pre>
+<p>Open <code>http://localhost:8000</code>, drag the <strong>Contrast Oracle</strong> link to the bookmarks bar, then activate it on the page you want to audit.</p>
+<p>Run <code>ContrastOracle.removeOverlay(document)</code> in the page console, or click the overlay&#x27;s Close button, to remove a result.</p>
+<h2>Assumptions</h2>
+<ul><li>The unpainted page canvas is white.</li><li>APCA targets use a practical two-level policy of Lc 60 for ordinary text and</li></ul>
+<p>  Lc 45 for large or heavy display text.</p>
+<ul><li>Gradient geometry uses each ancestor&#x27;s border rectangle. Default CSS</li></ul>
+<p>  positioning and sizing are assumed.</p>
+<ul><li>A suggested hex is opaque because six-digit hex has no alpha channel.</li></ul>
+<h2>Verify</h2>
+<pre><code>node --test test/*.test.js &amp;&amp; node scripts/build.js &amp;&amp; node scripts/verify-build.js</code></pre>
+<h2>Status</h2>
+<p>Verified locally with exit code 0:</p>
+<pre><code>✔ test/core.test.js (72.016511ms)
+✔ test/dom.test.js (149.077732ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.565674
+Built dist/bookmarklet.txt (43072 bytes)
+Bookmarklet PASS: gradient failure caught, suggested #626262, 1 in-place overlay</code></pre>
+<h2>Unfinished</h2>
+<ul><li>CSS <code>conic-gradient()</code>, raster background images, blend modes, masks, filters,</li></ul>
+<p>  pseudo-elements, text shadows, and text strokes are outside the current   background model.</p>
+<ul><li>Custom <code>background-size</code>, <code>background-position</code>, <code>background-repeat</code>, and</li></ul>
+<p>  non-default background clipping can shift gradient samples.</p>
+<ul><li>Closed shadow roots and cross-origin frames cannot be inspected by a page</li></ul>
+<p>  bookmarklet.</p>
+<ul><li>The regression compares against a background-color-only check. It does not</li></ul>
+<p>  bundle or execute axe-core.</p>
+<ul><li><code>test/browser-fixture.html</code> is available for a manual browser smoke test. The</li></ul>
+<p>  automated build check uses a deterministic DOM harness because Chrome cannot   start inside the fleet&#x27;s socket-restricted execution sandbox.</p>
+<footer>
+  <p>Part of <a href="https://github.com/JesseRWeigel/722-things-to-build">722 things to
+  build</a>, a catalog of scoped projects. Built and verified by an agent fleet; every
+  project ships with a verify command whose real exit code decides whether it counts
+  as done.</p>
+</footer>
+</div>

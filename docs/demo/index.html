@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contrast Oracle</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(89, 53, 210, .42), transparent 32rem),
+        #0d0d13;
+      color: #f7f5ff;
+    }
+    main {
+      width: min(42rem, calc(100% - 2rem));
+      padding: clamp(1.5rem, 6vw, 4rem);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 1.25rem;
+      background: rgba(22, 20, 34, .82);
+      box-shadow: 0 2rem 6rem rgba(0, 0, 0, .45);
+    }
+    h1 { margin: 0 0 .5rem; font-size: clamp(2.5rem, 9vw, 5rem); letter-spacing: -.06em; }
+    p { color: #c9c5d8; line-height: 1.65; }
+    .bookmarklet {
+      display: inline-block;
+      margin: 1rem 0;
+      padding: .9rem 1.15rem;
+      border-radius: .7rem;
+      background: #e7ff72;
+      color: #172000;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 .4rem 1.2rem rgba(153, 187, 0, .22);
+    }
+    code { color: #e7ff72; }
+    small { display: block; color: #918ca3; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Contrast Oracle</h1>
+    <p>
+      Audit visible text against sampled solid, translucent, linear-gradient, and
+      radial-gradient backgrounds. Each failing region gets its WCAG ratio, APCA
+      Lc, and a nearby passing color.
+    </p>
+    <a id="bookmarklet" class="bookmarklet" href="#" aria-disabled="true">Contrast Oracle</a>
+    <p id="install-status">Loading the bookmarklet…</p>
+    <small>
+      Serve this folder with <code>python3 -m http.server 8000</code>, open this
+      page, and drag the button to the bookmarks bar. Run it on any ordinary web
+      page. Click Close in the result panel to remove the audit.
+    </small>
+  </main>
+  <script src="installer.js"></script>
+</body>
+</html>
