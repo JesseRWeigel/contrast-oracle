@@ -2,7 +2,7 @@
 
 Walk every text node, compute the effective background through stacked translucent parents and gradients, evaluate WCAG 2.2 contrast plus APCA Lc, and for each failure suggest the nearest color in OKLCH that passes while preserving hue and chroma as far as possible. Overlay the failures in place with the suggested hex. Done when it catches a failure that axe-core misses because of a gradient background.
 
-Catalog task: `EXT-004`. Part of [thousand](https://github.com/JesseRWeigel/722-things-to-build).
+Catalog task: `EXT-004`. Part of [722 things to build](https://github.com/JesseRWeigel/722-things-to-build).
 
 **[Install the bookmarklet](https://jesserweigel.github.io/contrast-oracle/)**
 
